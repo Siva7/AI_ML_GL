@@ -1,13 +1,6 @@
 import numpy as np
 import pandas as pd
 import os
-
-"""
-Selecting columns
-    df["artists"]
-    df.artists => donot use this 
-    
-"""
 #Read the csv using pandas
 CSV_PATH = os.path.join(r"D:\IT\SelfTut\PluralSight- Pandas Fundamentals\pandas-fundamentals\02\demos\demos\collection-master","artwork_data.csv")
 
@@ -15,36 +8,65 @@ COL_TO_USE = ["id","artist","title","medium","year","acquisitionYear","height","
 
 input_df = pd.read_csv(CSV_PATH,usecols=COL_TO_USE,index_col="id")
 
-""" find number of distinct artits in the dataFrame"""
-len(pd.unique(input_df["artist"]))
-
-"""how many arts form Bacon, Francis"""
-
-series_with_truefalse= input_df["artist"] == "Bacon, Francis"
-
-input_df["artist"].value_counts()
- """
- Turner, Joseph Mallord William    39389
-Jones, George                      1046
-Moore, Henry, OM, CH                623
-Daniell, William                    612
-Beuys, Joseph                       578
- 
-Allinson, Adrian                      1
-Mednikoff, Reuben                     1
-Kaufmann, Isidor                      1
-Askew, Victor                         1
-Pether, Henry                         1
-Name: artist, Length: 3336, dtype: int64
 """
-artistname_count_series = input_df["artist"].value_counts()
+lables are what is in pandas index object
 
-artistname_count_series["Bacon, Francis"]
+loc = 
+df.loc[1099,'artist']
+df.loc[df['artist'] == 'Bacon, Francis',:]
 
-series_truefalse=dfwith_truefalse.value_counts()
+df.iloc[100:300,0,1,4]
 """
-False    69151
-True        50
-Name: artist, dtype: int64
+
+input_df.loc[1035,'artist']
+"""Blake, Robert"""
+
+input_df.iloc[0,0]
+"""Blake, Robert"""
+input_df.iloc[0:2,0:2]
+"""
+             artist                                              title
+id                                                                    
+1035  Blake, Robert  A Figure Bowing before a Seated Old Man with h...
+1036  Blake, Robert  Two Drawings of Frightened Figures, Probably f...
+"""
+
+"""Value of highest width """
+
+#this fails as data has strings
+input_df['height'].sort_values().head()
+
+#doesnt work as it has string 
+pd.to_numeric(input_df['height'])
+
+
+"""We ask pandas to ignore conversion errors"""
+numeric_height_series=pd.to_numeric(input_df['height'],errors='coerce')
+numeric_height_series.max()
+
+
+""" Update our dataframe """
+input_df.loc[:,'width'] = pd.to_numeric(input_df['width'],errors='coerce')
+
+input_df.loc[:,'height'] = pd.to_numeric(input_df['height'],errors='coerce')
+
+max_height = input_df['height'].sort_values().head()
+
+max_width = input_df['width'].sort_values().head()
+
+area_series = input_df['height'] * input_df['width']
+
 
 """
+Add a new column with assign
+
+input_df = input_df.assign(area=area_series)
+or as below
+"""
+input_df['area'] = area_series
+
+max_area=input_df['area'].max()
+
+index_of_max_area = input_df['area'].idxmax()
+
+max_area_record = input_df.loc[index_of_max_area,:]
