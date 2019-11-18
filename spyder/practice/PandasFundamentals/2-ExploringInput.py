@@ -1,56 +1,35 @@
-import numpy as np
 import pandas as pd
+import numpy as np
+import os
 
-np_array = np.random.rand(3)
-pd_series = pd.Series(np.random.rand(3))
+#Read the csv using pandas
+CSV_PATH = os.path.join(r"D:\IT\SelfTut\PluralSight- Pandas Fundamentals\pandas-fundamentals\02\demos\demos\collection-master","artwork_data.csv")
 
-pd_dataFrame = pd.DataFrame(np.random.rand(3,2))
+#Read just 5 rows from the file
+
+fiveRows_df = pd.read_csv(CSV_PATH,nrows=5)
+
+#To take a specific column as index from the data itself
+
+fiveRows_with_inbuild_index_df= pd.read_csv(CSV_PATH,nrows=5,index_col="id")
+
+#limit number of columns
+
+fiverows_twocolumns_df = pd.read_csv(CSV_PATH,nrows=5,index_col="id",usecols=["id","artist"])
 
 """
-Index is assigned by default we can override it as well
-"""
-
-pd_series_with_index = pd.Series(np.random.rand(3),index=["first","second","third"])
-
-"""
-can use both the custom index and the number index to refer to items
-"""
-
-print(pd_series_with_index["first"])
-print(pd_series_with_index[0])
-
-pd_series_with_index
-"""
-first     0.176973
-second    0.666953
-third     0.370319
-dtype: float64
-"""
-pd_series_with_index.index
-"""
- Index(['first', 'second', 'third'], dtype='object')
+can use index instead of names but not amix
 """
 
-pd_dataFrame.columns
-"""
-RangeIndex(start=0, stop=2, step=1)
-"""
-pd_dataFrame
-"""
-          0         1
-0  0.285770  0.793492
-1  0.087973  0.861112
-2  0.741682  0.679179
-"""
-pd_dataFrame.columns = ["first","second"]
-pd_dataFrame
+COL_TO_USE = ["id","artist","title","medium","year","acquisitionYear","height","width","units"]
 
-pd_series_from_df = pd_dataFrame["first"]
-pd_series_from_df
+#proper data nad entire data
+
+entiredata_df = pd.read_csv(CSV_PATH,index_col="id",usecols=COL_TO_USE)
+
 """
-0    0.285770
-1    0.087973
-2    0.741682
-Name: first, dtype: float64
+Save for later
+One of the best ways to save is to use pickle if you are only interatcing with the data in python
 """
 
+entiredata_df.to_pickle(os.path.join(r"D:\IT\SelfTut\PluralSight- Pandas Fundamentals\pandas-fundamentals\02\demos\demos\collection-master","artwork_data.pickle"))
